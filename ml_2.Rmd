@@ -8,9 +8,9 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(fs)
+library(gt)
 library(tidymodels)
 library(tidyverse)
-
 ```
 
 ## Predicting Democratic Votes
@@ -84,8 +84,16 @@ x_1 <- clean %>%
   mutate(prediction = predict(model_1, type = "response")) %>% 
   mutate(pred_dvote = as.factor(ifelse(prediction > mean(prediction), "Yes", "No")))
 
+x_1
+
 ```
 
+```{r}
+# How good is this model? Use the metrics() function from the yardstick package to explore that question
+metrics(x_1, truth = dvote, estimate = pred_dvote) %>% 
+  gt() %>% 
+  tab_header("Model 1 Performance")
+```
 
 
 
